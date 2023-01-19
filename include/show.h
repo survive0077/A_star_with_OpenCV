@@ -10,7 +10,9 @@
 
 namespace show
 {
-    int intervel = 50;
-    void showMap(std::vector <std::vector<cell::cell>> map, cv::Mat background);
+    int intervel = 20;
+    void showMap(std::vector <std::vector<cell::cell>> map, cv::Mat &background);
+    void showPath(std::vector <std::vector<cell::cell>> map, int endRow, int endColumn, cv::Mat &background);
+    void showResult(std::vector <std::vector<cell::cell>> map, cv::Mat background);
 }
 #endif //A_STAR_SHOW_H

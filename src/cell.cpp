@@ -4,26 +4,56 @@
 
 #include "../include/cell.h"
 #include <cmath>
+#include <algorithm>
+
 namespace cell
 {
     cell::cell(int a, int b)
     {
-        x = a;
-        y = b;
+        row = a;
+        col = b;
+    }
+
+    cell::cell(const cell &c)
+    {
+        row = c.row;
+        col = c.col;
+        parent_row = c.parent_row;
+        parent_col = c.parent_col;
+        hScore = c.hScore;
+        fScore = c.fScore;
+        hScore = c.hScore;
+        isObstacle = c.isObstacle;
+        isBegin = c.isBegin;
+        isEnd = c.isEnd;
+        done = c.done;
     }
 
     cell::~cell() {}
 
+    void cell::set_parent(const cell &p)
+    {
+        parent_row = p.row;
+        parent_col = p.col;
+    }
+
     void cell::set_gScore(cell father)
     {
         double add;
-        add = sqrt(pow((father.get_x() - x), 2) + pow((father.get_y() - y), 2));
+        add = sqrt(pow((father.get_row() - row), 2) + pow((father.get_col() - col), 2));
         gScore = father.get_gScore() + add;
     }
 
     void cell::set_hScore(cell end)
     {
-        hScore = abs(end.get_x() - x) + abs(end.get_y() - y);
+        int dy = abs(end.get_row() - row);
+        int dx = abs(end.get_col() - col);
+        hScore = (dx + dy) + (sqrt(2) - 2) * std::min(dx, dy);
+    }
+
+    void cell::set_fScore()
+    {
+        fScore = gScore + hScore;
     }
 
     void cell::set_isObstacle()
@@ -31,19 +61,59 @@ namespace cell
         isObstacle = 1;
     }
 
-    int  cell::get_x()
+    void cell::set_isBegin()
     {
-        return x;
+        isBegin = 1;
     }
 
-    int  cell::get_y()
+    void cell::set_isEnd()
     {
-        return y;
+        isEnd = 1;
     }
 
-    double cell::get_gScore()
+    void cell::set_done()
     {
-        return gScore;
+        done = 1;
+    }
+
+    int cell::get_parent_row()
+    {
+        return parent_row;
+    }
+
+    int cell::get_parent_col()
+    {
+        return parent_col;
+    }
+
+    int  cell::get_row()
+    {
+        return row;
+    }
+
+    int  cell::get_col()
+    {
+        return col;
+    }
+
+    int cell::get_isObstacle()
+    {
+        return isObstacle;
+    }
+
+    int cell::get_isBegin()
+    {
+        return isBegin;
+    }
+
+    int cell::get_isEnd()
+    {
+        return isEnd;
+    }
+
+    int cell::get_done()
+    {
+        return done;
     }
 
     int  cell::get_hScore()
@@ -51,9 +121,14 @@ namespace cell
         return hScore;
     }
 
-    int cell::get_isObstacle()
+    double cell::get_gScore()
     {
-        return isObstacle;
+        return gScore;
+    }
+
+    double cell::get_fScore()
+    {
+        return fScore;
     }
 }
 
